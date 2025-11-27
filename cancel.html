@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="问真八字账号注销页面">
+  <title>账号注销-问真八字</title>
+  <script src="./js/jquery-3.7.1.slim.min.js"></script>
+  <style>
+    /* 基础样式和H5优化 */
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: 'SimSun', 'STSong', serif;
+      background-color: #f5f5dc;
+      color: #333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-image: url('./images/bg_header.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* 优化容器样式，适合H5 */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.95);
+      border: 2px solid #8B4513;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* 标题样式优化 */
+    h1 {
+      color: #8B4513;
+      text-align: center;
+      font-size: 24px;
+      margin: 0 0 20px 0;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+      border-bottom: 2px solid #CD853F;
+      padding-bottom: 15px;
+      line-height: 1.4;
+    }
+    
+    /* 警告信息优化 */
+    .warning {
+      background-color: #FFF8DC;
+      border-left: 4px solid #FFD700;
+      padding: 15px 12px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #8B4513;
+      border-radius: 4px;
+    }
+    
+    .warning ul {
+      margin: 10px 0 0 0;
+      padding-left: 20px;
+    }
+    
+    .warning li {
+      margin-bottom: 5px;
+      line-height: 1.4;
+    }
+    
+    /* 步骤说明优化 */
+    .steps {
+      margin-bottom: 20px;
+      font-size: 13px;
+      background-color: #FFF9E6;
+      padding: 12px;
+      border-radius: 4px;
+      border: 1px solid #E6CCB2;
+    }
+    
+    .steps ol {
+      margin: 8px 0 0 0;
+      padding-left: 20px;
+    }
+    
+    .steps li {
+      margin-bottom: 5px;
+      line-height: 1.4;
+    }
+    
+    /* 表单组样式 */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #5D4037;
+      font-size: 14px;
+    }
+    
+    /* 输入框样式优化，针对H5 */
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+      width: 100%;
+      padding: 14px 12px;
+      border: 2px solid #CD853F;
+      border-radius: 6px;
+      background-color: #FFF8DC;
+      font-family: 'SimSun', 'STSong', serif;
+      font-size: 16px;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      /* 修复iOS输入框缩放问题 */
+      font-size: 16px;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #8B4513;
+      background-color: #FFFFF0;
+      box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2);
+    }
+    
+    /* 验证码组样式优化 - 确保在同一行 */
+    .verification-group {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      width: 100%;
+    }
+    
+    .verification-group input {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    /* 按钮样式优化，增大点击区域 */
+    button {
+      background-color: #8B4513;
+      color: white;
+      border: 2px solid #654321;
+      padding: 14px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-family: 'SimSun', 'STSong', serif;
+      transition: all 0.2s ease;
+      /* 增大点击区域 */
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+    
+    button:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+    
+    button:hover:not(:disabled) {
+      background-color: #654321;
+    }
+    
+    button:disabled {
+      background-color: #A0522D;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    
+    /* 发送验证码按钮样式 - 优化同一行显示 */
+    #sendCodeBtn {
+      width: 120px;
+      flex-shrink: 0;
+      font-size: 14px;
+      padding: 0 10px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      border-radius: 6px;
+      margin-left: 10px;
+    }
+    
+    /* 提交按钮样式 */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      font-size: 18px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    
+    /* 弹窗样式优化 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    .modal-content {
+      background-color: #FFF8DC;
+      padding: 28px 25px;
+      border: 3px solid #8B4513;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      animation: slideIn 0.3s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateY(-30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .modal-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #8B4513, #CD853F, #8B4513);
+    }
+    
+    .modal h3 {
+      color: #8B4513;
+      margin: 0 0 20px 0;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      line-height: 1.3;
+    }
+    
+    .modal p {
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0 0 25px 0;
+      text-align: center;
+      color: #5D4037;
+      padding: 0 10px;
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 0;
+    }
+    
+    .modal-btn {
+      flex: 1;
+      padding: 15px 12px;
+      font-size: 17px;
+      max-width: 160px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .modal-btn:active {
+      transform: scale(0.96) translateY(2px);
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .cancel-btn {
+      background-color: #D2B48C;
+      border-color: #BC8F8F;
+      color: #5D4037;
+    }
+    
+    .cancel-btn:hover,
+    .cancel-btn:active {
+      background-color: #BC8F8F;
+    }
+    
+    #modalConfirmBtn {
+      background-color: #922B21;
+      border-color: #78281F;
+    }
+    
+    #modalConfirmBtn:hover {
+      background-color: #78281F;
+    }
+    
+    /* 添加重要提示图标样式 */
+    .modal-warning-icon {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .modal-warning-icon::before {
+      content: '⚠️';
+      font-size: 40px;
+      display: inline-block;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    
+    /* 成功消息样式 - 增强版 */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      color: #8B4513;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      animation: fadeInUp 0.5s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .success-message .success-icon {
+      font-size: 60px;
+      margin-bottom: 20px;
+      animation: successPulse 2s ease-out;
+    }
+    
+    @keyframes successPulse {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.2);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .success-message h2 {
+      margin-bottom: 15px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #2E8B57;
+    }
+    
+    .success-message p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #5D4037;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    .success-message .note {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #8B4513;
+      font-style: italic;
+    }
+    
+    /* 增强版响应式设计，针对不同移动端设备 */
+    @media (max-width: 768px) {
+      .container {
+        margin: 0;
+        padding: 15px;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+      }
+      
+      h1 {
+        font-size: 22px;
+        padding-bottom: 12px;
+      }
+      
+      /* 调整验证码区域在移动设备上的布局 */
+      .verification-group {
+        flex-direction: row;
+        align-items: stretch;
+      }
+      
+      #sendCodeBtn {
+        width: 110px;
+        font-size: 13px;
+        margin-left: 8px;
+        padding: 0 8px;
+      }
+      
+      /* 针对小屏手机优化，确保在一行显示 */
+      @media (max-width: 320px) {
+        #sendCodeBtn {
+          width: 100px;
+          font-size: 12px;
+        }
+        
+        .verification-group {
+          gap: 6px;
+        }
+      }
+      
+      /* 按钮在移动端更宽更大 */
+      button {
+        min-height: 50px;
+        font-size: 17px;
+      }
+      
+      .submit-btn {
+        padding: 18px;
+        font-size: 19px;
+      }
+      
+      .modal-content {
+        padding: 20px 15px;
+      }
+      
+      .modal h3 {
+        font-size: 18px;
+      }
+      
+      .modal-actions {
+        flex-direction: column;
+      }
+      
+      .modal-btn {
+        max-width: 100%;
+      }
+      
+      /* 优化输入框在小屏幕上的样式 */
+      input[type="text"],
+      input[type="password"],
+      input[type="email"] {
+        padding: 16px 14px;
+        font-size: 17px;
+      }
+    }
+    
+    /* 针对iPhone等小屏设备的额外优化 */
+    @media (max-width: 375px) {
+      .container {
+        padding: 12px;
+      }
+      
+      h1 {
+        font-size: 20px;
+      }
+      
+      .warning, .steps {
+        font-size: 12px;
+        padding: 10px;
+      }
+    }
+    
+    /* 修复iOS滚动卡顿问题 */
+    html, body {
+      -webkit-overflow-scrolling: touch;
+      overflow-scrolling: touch;
+    }
+    
+    /* 优化表单元素的可访问性 */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>账号注销</h1>
+    
+    <div class="steps">
+      <strong>注销流程：</strong>
+      <ol>
+        <li>填写账号信息并验证身份</li>
+        <li>获取并输入邮箱验证码</li>
+        <li>确认注销账号</li>
+      </ol>
+    </div>
+    
+    <form id="cancelForm" style="margin-bottom: 30px;">
+
+      <div class="form-group">
+        <label for="email">邮箱</label>
+        <input type="email" id="email" required placeholder="请输入您的邮箱">
+      </div>
+            
+      <div class="form-group">
+        <label for="password">密码</label>
+        <input type="password" id="password" required placeholder="请输入您的密码">
+      </div>
+      
+      <div class="form-group">
+        <label for="verificationCode">验证码</label>
+        <div class="verification-group">
+          <input type="text" id="verificationCode" required placeholder="请输入验证码">
+          <button type="button" id="sendCodeBtn">获取验证码</button>
+        </div>
+      </div>
+      
+      <button type="submit" class="submit-btn">提交注销申请</button>
+    </form>
+    
+    <!-- 保持原有成功消息结构，但修改内容 -->
+    <!-- <div class="success-message" id="successMessage">
+      <div class="success-icon">✓</div>
+      <h2>账号注销申请已提交</h2>
+      <p>您的申请已成功提交，我们将尽快处理。</p>
+      <p class="note">如有疑问，请联系客服。</p>
+    </div> -->
+      <div class="warning" >
+    <h2>问真八字 - 删除账号说明:</h2>
+    <p>本页面提供《问真八字》应用账号删除相关说明，帮助用户了解如何删除账号及其相关数据。</p >
+    <h4>1. 删除账号的操作步骤</h2>
+    <p>在《问真八字》App 内删除账号的步骤如下：</p >
+    <ul>
+      <li>打开 App</li>
+      <li>进入 <strong>设置</strong> → <strong>账号</strong></li>
+      <li>点击 <strong>删除账号</strong> 按钮</li>
+      <li>按照提示确认删除</li>
+    </ul>
+    <h4>2. 删除后会发生什么</h4>
+    <p>删除账号后，将会：</p >
+    <ul>
+      <li>彻底删除该账号及其所有相关信息，包括用户输入的排盘数据</li>
+      <li>无法恢复删除的数据，请在操作前谨慎确认</li>
+    </ul>
+
+    <h4>3. 数据删除时间</h4>
+    <p>账号删除请求提交后，所有数据将在 <strong>立即生效</strong>（如果有处理延迟，最多不超过 24 小时）被清除。</p >
+
+    <h4>4. 联系方式</h4>
+    <p>如有疑问，请通过 App 内反馈功能联系我们。</p >
+    </div>
+  <div>
+  </div> 
+
+
+
+  </div>
+   <!-- 确认弹窗 -->
+  <div class="modal" id="confirmModal">
+    <div class="modal-content">
+      <div class="modal-warning-icon"></div>
+      <h3>确认注销账号</h3>
+      <p>您确定要注销账号吗？此操作<strong>不可逆</strong>，所有数据将被永久删除。</p>
+      <div class="modal-actions">
+        <button type="button" class="modal-btn cancel-btn" id="modalCancelBtn">取消</button>
+        <button type="button" class="modal-btn" id="modalConfirmBtn">确认注销</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    $(document).ready(function() {
+      // 发送验证码倒计时功能
+      let countdown = 60;
+      let timer = null;
+      
+      $('#sendCodeBtn').click(function() {
+        const email = $('#email').val();
+        const btn = $(this);
+        
+        if (!email) {
+          alert('请输入邮箱');
+          return;
+        }
+        
+        if (!validateEmail(email)) {
+          alert('请输入有效的邮箱地址');
+          return;
+        }
+        
+        // 显示加载状态
+        showToast('正在发送验证码...', false);
+        
+        // 准备表单数据
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('type', 3);
+        
+        // 使用fetch API发送请求
+        fetch('https://wwt.qingfeng003mydufspa.top/Admin/Adminback/sendEmailCode', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          hideToast();
+          
+          if (data && data.code === 0) {
+            // 禁用按钮并开始倒计时
+            let countdown = 60;
+            btn.prop('disabled', true);
+            btn.text(countdown + '秒后重新获取');
+            
+            const timer = setInterval(() => {
+              countdown--;
+              btn.text(countdown + '秒后重新获取');
+              
+              if (countdown <= 0) {
+                clearInterval(timer);
+                btn.prop('disabled', false);
+                btn.text('获取验证码');
+              }
+            }, 1000);
+            
+            showToast('验证码已发送，请查收', true);
+          } else {
+            alert(data && data.msg ? data.msg : '发送失败，请稍后重试');
+          }
+        })
+        .catch(error => {
+          hideToast();
+          alert('网络异常，请检查网络连接后重试');
+          console.error('发送验证码失败:', error);
+        });
+      });
+      
+      // 表单提交处理
+      $('#cancelForm').submit(function(e) {
+        e.preventDefault();
+        
+        // 验证表单
+        if (!validateForm()) {
+          return;
+        }
+        
+        // 显示确认弹窗
+        $('#confirmModal').css('display', 'flex');
+      });
+      
+      // 取消注销
+      $('#modalCancelBtn').click(function() {
+        $('#confirmModal').css('display', 'none');
+      });
+      
+      // 确认注销
+      $('#modalConfirmBtn').click(function() {
+        // 隐藏弹窗
+        $('#confirmModal').css('display', 'none');
+        
+        // 获取表单数据
+        const email = $('#email').val();
+        const password = $('#password').val();
+        const code = $('#verificationCode').val();
+        
+        // 显示加载状态
+        showToast('正在提交删除申请...', false);
+        
+        // 准备表单数据
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('code', code);
+        
+        // 使用fetch API发送请求
+        fetch('https://wwt.qingfeng003mydufspa.top/Admin/Adminback/deleteAccount', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          hideToast();
+          
+          if (data && data.code === 0) {
+            // 显示成功提示
+            // showToast('删除申请提交成功！', true);
+            // showToast('删除申请提交成功!', true);
+            alert('删除申请提交成功!');
+            // 清空表单 
+            $('#cancelForm')[0].reset();
+
+          } else {
+            // 显示错误信息
+            alert(data && data.msg ? data.msg : '操作失败，请稍后重试');
+          }
+        })
+        .catch(error => {
+          hideToast();
+          alert('网络异常，请检查网络连接后重试');
+          console.error('提交注销申请失败:', error);
+        });
+      });
+      
+      // 简单的Toast提示函数
+      function showToast(message, isSuccess) {
+        // 检查是否已存在toast元素
+        let toast = $('#toast');
+        if (toast.length === 0) {
+          // 创建toast元素
+          toast = $('<div id="toast" class="toast"></div>');
+          $('body').append(toast);
+          
+          // 添加toast样式
+          toast.css({
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: isSuccess ? 'rgba(46, 139, 87, 0.95)' : 'rgba(139, 69, 19, 0.95)',
+            color: 'white',
+            padding: '15px 25px',
+            borderRadius: '8px',
+            fontSize: '16px',
+            zIndex: '9999',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+            opacity: '0',
+            transition: 'opacity 0.3s ease'
+          });
+        }
+        
+        // 设置消息并显示
+        toast.text(message);
+        toast.css('opacity', '1');
+        
+        // 成功消息自动隐藏
+        if (isSuccess) {
+          setTimeout(() => {
+            hideToast();
+          }, 3000);
+        }
+      }
+      
+      function hideToast() {
+        const toast = $('#toast');
+        if (toast.length > 0) {
+          toast.css('opacity', '0');
+          setTimeout(() => {
+            toast.remove();
+          }, 300);
+        }
+      }
+      
+      // 邮箱验证函数
+      function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
+      
+      // 表单验证函数
+      function validateForm() {
+        // 不需要账号验证，直接获取其他字段
+        const password = $('#password').val();
+        const email = $('#email').val();
+        const code = $('#verificationCode').val();
+        
+        // 保留密码验证逻辑，但不再是必填项，用于用户确认身份
+        if (password && password.length < 6) {
+          alert('密码长度不能少于6位');
+          return false;
+        }
+        
+        // 邮箱验证
+        if (!email) {
+          alert('请输入邮箱');
+          return false;
+        }
+        
+        if (!validateEmail(email)) {
+          alert('请输入有效的邮箱地址');
+          return false;
+        }
+        
+        // 验证码验证
+        if (!code || code.length !== 6 || !/^\d+$/.test(code)) {
+          alert('请输入有效的6位数字验证码');
+          return false;
+        }
+        
+        return true;
+      }
+      
+      // 点击弹窗外部关闭弹窗
+      $(window).click(function(e) {
+        if (e.target === $('#confirmModal')[0]) {
+          $('#confirmModal').css('display', 'none');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+div,
+section,
+header,
+nav,
+article,
+aside,
+footer {
+  box-sizing: border-box;
+}
+
+h1 {
+  margin: 0;
+  font-weight: 400;
+}
+
+em {
+  font-style: normal;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+}
+
+a {
+  text-decoration: none;
+  outline: none;
+  color: black;
+}

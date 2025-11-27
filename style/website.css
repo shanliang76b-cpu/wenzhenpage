@@ -1,0 +1,140 @@
+.container {
+  width: 100vw;
+  overflow: hidden;
+}
+
+.navigation {
+  position: relative;
+  width: 100%;
+  font-size: 0;
+}
+.navigation-bg {
+  width: 100%;
+}
+.navigation-left,
+.navigation-right {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5vw;
+  padding: 5vw;
+}
+.navigation-right {
+  left: auto;
+  right: 0;
+}
+.navigation-left img,
+.navigation-right img {
+  width: 100%;
+}
+.navigation-download {
+  position: absolute;
+  bottom: 12%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 25vw;
+}
+.navigation-download-img {
+  width: 100%;
+}
+
+.detail {
+  position: relative;
+  top: -5px;
+  width: 100%;
+}
+.detail-intro {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.detail-intro-img {
+  width: 100%;
+}
+.detail-intro-list {
+  position: absolute;
+  top: 50%;
+  left: 5vw;
+  right: 5vw;
+  display: grid;
+  grid-template-columns: repeat(3, 33%);
+}
+.detail-intro-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.detail-intro-item:nth-child(3n + 2) {
+  padding-left: 15px;
+}
+.detail-intro-item:nth-child(3n) {
+  padding-left: 25px;
+}
+.detail-intro-item:hover {
+  cursor: pointer;
+}
+.detail-intro-item img {
+  width: 7vw;
+}
+.detail-intro-item-text {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+  font-size: 3vw;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.detail-intro-item-text strong {
+  font-family: 'SimSun';
+}
+.detail-intro-item-text em {
+  font-weight: 400;
+  transform-origin: left;
+  transform: scale(0.7);
+}
+.detail-img {
+  width: 100%;
+}
+
+.intro {
+  width: 88%;
+  margin: 0 auto 15px;
+  padding: 0 20px 40px;
+  text-align: center;
+  background-color: #f5f5f5;
+}
+.intro-title {
+  position: relative;
+  display: inline-block;
+  margin: 35px 0 25px;
+  font-size: 26px;
+  font-weight: normal;
+  letter-spacing: 0.2em;
+}
+.intro-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  width: 50%;
+  margin: auto;
+  border-bottom: 1.5px solid #b7b7b7;
+}
+.intro-content {
+  font-size: 14px;
+  letter-spacing: 0.1em;
+}
+
+.footer-intro {
+  margin: 15px 0 10px;
+  font-size: 12px;
+}
+.footer-intro-item {
+  display: block;
+  line-height: 18px;
+}
