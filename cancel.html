@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-    content="问真八字账号注销页面">
-  <title>账号注销-问真八字</title>
+    content="诸葛八字账号注销页面">
+  <title>账号注销-诸葛八字</title>
   <script src="./js/jquery-3.7.1.slim.min.js"></script>
   <style>
     /* 基础样式和H5优化 */
@@ -531,20 +531,20 @@
   <div class="container">
     <h1>账号注销</h1>
     
-    <div class="steps">
+    <!-- <div class="steps">
       <strong>注销流程：</strong>
       <ol>
         <li>填写账号信息并验证身份</li>
         <li>获取并输入邮箱验证码</li>
         <li>确认注销账号</li>
       </ol>
-    </div>
+    </div> -->
     
     <form id="cancelForm" style="margin-bottom: 30px;">
 
       <div class="form-group">
-        <label for="email">邮箱</label>
-        <input type="email" id="email" required placeholder="请输入您的邮箱">
+        <label for="uid">用户ID</label>
+        <input type="text" id="uid" required placeholder="请输入您的用户ID">
       </div>
             
       <div class="form-group">
@@ -553,11 +553,8 @@
       </div>
       
       <div class="form-group">
-        <label for="verificationCode">验证码</label>
-        <div class="verification-group">
-          <input type="text" id="verificationCode" required placeholder="请输入验证码">
-          <button type="button" id="sendCodeBtn">获取验证码</button>
-        </div>
+        <label for="confirm_password">确认密码</label>
+        <input type="password" id="confirm_password" required placeholder="请再次输入您的密码">
       </div>
       
       <button type="submit" class="submit-btn">提交注销申请</button>
@@ -571,10 +568,10 @@
       <p class="note">如有疑问，请联系客服。</p>
     </div> -->
       <div class="warning" >
-    <h2>问真八字 - 删除账号说明:</h2>
-    <p>本页面提供《问真八字》应用账号删除相关说明，帮助用户了解如何删除账号及其相关数据。</p >
+    <h2>诸葛八字 - 删除账号说明:</h2>
+    <p>本页面提供《诸葛八字》应用账号删除相关说明，帮助用户了解如何删除账号及其相关数据。</p >
     <h4>1. 删除账号的操作步骤</h2>
-    <p>在《问真八字》App 内删除账号的步骤如下：</p >
+    <p>在《诸葛八字》App 内删除账号的步骤如下：</p >
     <ul>
       <li>打开 App</li>
       <li>进入 <strong>设置</strong> → <strong>账号</strong></li>
@@ -615,69 +612,6 @@
   
   <script>
     $(document).ready(function() {
-      // 发送验证码倒计时功能
-      let countdown = 60;
-      let timer = null;
-      
-      $('#sendCodeBtn').click(function() {
-        const email = $('#email').val();
-        const btn = $(this);
-        
-        if (!email) {
-          alert('请输入邮箱');
-          return;
-        }
-        
-        if (!validateEmail(email)) {
-          alert('请输入有效的邮箱地址');
-          return;
-        }
-        
-        // 显示加载状态
-        showToast('正在发送验证码...', false);
-        
-        // 准备表单数据
-        const formData = new FormData();
-        formData.append('email', email);
-        formData.append('type', 3);
-        
-        // 使用fetch API发送请求
-        fetch('https://wwt.qingfeng003mydufspa.top/Admin/Adminback/sendEmailCode', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          hideToast();
-          
-          if (data && data.code === 0) {
-            // 禁用按钮并开始倒计时
-            let countdown = 60;
-            btn.prop('disabled', true);
-            btn.text(countdown + '秒后重新获取');
-            
-            const timer = setInterval(() => {
-              countdown--;
-              btn.text(countdown + '秒后重新获取');
-              
-              if (countdown <= 0) {
-                clearInterval(timer);
-                btn.prop('disabled', false);
-                btn.text('获取验证码');
-              }
-            }, 1000);
-            
-            showToast('验证码已发送，请查收', true);
-          } else {
-            alert(data && data.msg ? data.msg : '发送失败，请稍后重试');
-          }
-        })
-        .catch(error => {
-          hideToast();
-          alert('网络异常，请检查网络连接后重试');
-          console.error('发送验证码失败:', error);
-        });
-      });
       
       // 表单提交处理
       $('#cancelForm').submit(function(e) {
@@ -703,21 +637,27 @@
         $('#confirmModal').css('display', 'none');
         
         // 获取表单数据
-        const email = $('#email').val();
+        const uid = $('#uid').val();
         const password = $('#password').val();
-        const code = $('#verificationCode').val();
+        const confirm_password = $('#confirm_password').val();
+        
+        // 验证密码和确认密码是否一致
+        if (password !== confirm_password) {
+          alert('两次输入的密码不一致');
+          return;
+        }
         
         // 显示加载状态
         showToast('正在提交删除申请...', false);
         
         // 准备表单数据
         const formData = new FormData();
-        formData.append('email', email);
+        formData.append('uid', uid);
         formData.append('password', password);
-        formData.append('code', code);
+        formData.append('confirm_password', confirm_password);
         
         // 使用fetch API发送请求
-        fetch('https://wwt.qingfeng003mydufspa.top/Admin/Adminback/deleteAccount', {
+        fetch('https://wwt.qingfeng003mydufspa.top/Admin/Adminback/zhcancel', {
           method: 'POST',
           body: formData
         })
@@ -727,9 +667,7 @@
           
           if (data && data.code === 0) {
             // 显示成功提示
-            // showToast('删除申请提交成功！', true);
-            // showToast('删除申请提交成功!', true);
-            alert('删除申请提交成功!');
+            alert('注销成功!');
             // 清空表单 
             $('#cancelForm')[0].reset();
 
@@ -794,39 +732,29 @@
         }
       }
       
-      // 邮箱验证函数
-      function validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-      }
-      
       // 表单验证函数
       function validateForm() {
-        // 不需要账号验证，直接获取其他字段
+        const uid = $('#uid').val();
         const password = $('#password').val();
-        const email = $('#email').val();
-        const code = $('#verificationCode').val();
+        const confirm_password = $('#confirm_password').val();
         
-        // 保留密码验证逻辑，但不再是必填项，用于用户确认身份
-        if (password && password.length < 6) {
-          alert('密码长度不能少于6位');
+        if (!uid) {
+          alert('请输入用户ID');
           return false;
         }
         
-        // 邮箱验证
-        if (!email) {
-          alert('请输入邮箱');
+        if (!password) {
+          alert('请输入密码');
           return false;
         }
         
-        if (!validateEmail(email)) {
-          alert('请输入有效的邮箱地址');
+        if (!confirm_password) {
+          alert('请确认密码');
           return false;
         }
         
-        // 验证码验证
-        if (!code || code.length !== 6 || !/^\d+$/.test(code)) {
-          alert('请输入有效的6位数字验证码');
+        if (password !== confirm_password) {
+          alert('两次输入的密码不一致');
           return false;
         }
         
